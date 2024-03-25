@@ -10,6 +10,9 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using AutoMapper;
 namespace ASP.Net_core.Controllers
 {
     [Route("api/[controller]")]
@@ -17,10 +20,18 @@ namespace ASP.Net_core.Controllers
     public class AuthController : ControllerBase
     {
         private readonly Net_APIContext _context;
-
-        public AuthController(Net_APIContext context)
+        private readonly IMapper _mapper;
+        public AuthController(Net_APIContext context, IMapper mapper)
         {
             _context = context;
+            this._mapper = mapper;
+        }
+        public class ApiException : Exception {
+            public int StatusCode {  get; }
+            public ApiException(int statusCode, string massage): base(massage)
+            {
+                StatusCode = statusCode;
+            }
         }
 
         [HttpPost("login")]
@@ -35,22 +46,28 @@ namespace ASP.Net_core.Controllers
                     var token = GennerateToken(user);
                     return Ok(new { Token = token });
                 }
-                return Unauthorized();
+                else if(loginRequest.Username == "" && loginRequest.Password=="")
+                {
+                    return NotFound("String");
+                }
+                else
+                {
+                    return Unauthorized("Invalid usser or passwork");
+                }
             }
             catch (DbUpdateException ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error update database");
+                throw new ApiException(StatusCodes.Status500InternalServerError, "Error update database"+ ex.Message);
 
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Lỗi sử lý yêu cầu ");
+                throw new ApiException(StatusCodes.Status500InternalServerError, "Internal sever error: " +ex.Message);
             }
-            
         }
         private string GennerateToken(Users users) {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("lethingocanhABCDEFGTHAKRJNSNJFNJDJJFBKDBFKJDFJNDFSJ");
+            var key = Encoding.ASCII.GetBytes("lethingocanhABCDEFGTHAKRJNS");
             var tokenDescreiption = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
@@ -64,9 +81,8 @@ namespace ASP.Net_core.Controllers
             return tokenHandler.WriteToken(token);
         }
         [HttpPost("logout")]
-        public ActionResult Logout()
+        public async Task<ActionResult> Logout()
         {
-
             return Ok();
         }
     }

@@ -250,3 +250,6 @@ C:\Users\ANHLTN\source\repos\Net_API\Net_API\obj\Debug\net8.0\refint\Net_API.dll
 C:\Users\ANHLTN\source\repos\Net_API\Net_API\obj\Debug\net8.0\Net_API.pdb
 C:\Users\ANHLTN\source\repos\Net_API\Net_API\obj\Debug\net8.0\Net_API.genruntimeconfig.cache
 C:\Users\ANHLTN\source\repos\Net_API\Net_API\obj\Debug\net8.0\ref\Net_API.dll
+C:\Users\ANHLTN\source\repos\Net_API\Net_API\obj\Debug\net8.0\Net_API.sourcelink.json
+C:\Users\ANHLTN\source\repos\Net_API\Net_API\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\ANHLTN\source\repos\Net_API\Net_API\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

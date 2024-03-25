@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Net_API.Data;
+using Net_API.DTO;
 using Net_API.Model;
 
 namespace Net_API.Controllers
@@ -15,23 +17,27 @@ namespace Net_API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly Net_APIContext _context;
+        private readonly  IMapper _mapper;
 
-        public UsersController(Net_APIContext context)
+        public UsersController(Net_APIContext context, IMapper _mapper)
         {
             _context = context;
+            this._mapper = _mapper;
           
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _context.Users.ToArrayAsync();
+            var userDTO = _mapper.Map<IEnumerable<UserDTO>>(users);
+            return Ok(userDTO); 
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Users>> GetUsers(int id)
+        public async Task<ActionResult<UserDTO>> GetUsers(int id)
         {
             var users = await _context.Users.FindAsync(id);
 
@@ -39,8 +45,8 @@ namespace Net_API.Controllers
             {
                 return NotFound();
             }
-
-            return users;
+            var userDTO = _mapper.Map<UserDTO>(users);
+            return Ok(userDTO);
         }
   
         // PUT: api/Users/5
