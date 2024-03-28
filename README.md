@@ -9,7 +9,7 @@ Hướng dẫn để khởi chạy dự án
 
 ## Setup
 - clone repository (https://github.com/lunacaoz/Project_netcore)
-- Khởi động Visual Studio vào open file .sln
+- Khởi động Visual Studio vào open file 
 - Khởi động SQL server và làm theo hướng dẫn để cài đặt tài khoản sa : https://www.youtube.com/watch?v=ftVcBoZRAMA
 sau đó tạo database " DataNet "
 -Tiếp theo vào VisualStudio kick chuộc phải vào file connect service để thực hiện các bước 
